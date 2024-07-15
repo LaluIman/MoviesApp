@@ -8,7 +8,7 @@
 import Foundation
 
 class NetworkManager: ObservableObject {
-    private let apiKey = "API_KEY"
+    private let apiKey = "ce1d7f06f6b40256df50aaff1946dcde"
     @Published var topMovies: [Movie] = []
     @Published var recentMovies: [Movie] = []
     @Published var allMovies: [Movie] = []
@@ -45,7 +45,6 @@ class NetworkManager: ObservableObject {
         fetchMovies(endpoint: "movie/top_rated") { [weak self] movies in
             self?.topMovies = movies
             self?.updateAllMovies()
-            self?.selectRandomMovie()
         }
     }
     
@@ -53,7 +52,6 @@ class NetworkManager: ObservableObject {
         fetchMovies(endpoint: "movie/now_playing") { [weak self] movies in
             self?.recentMovies = movies
             self?.updateAllMovies()
-            self?.selectRandomMovie()
         }
     }
     
@@ -86,6 +84,7 @@ class NetworkManager: ObservableObject {
     
     private func updateAllMovies() {
         allMovies = (topMovies + recentMovies).shuffled()
+        selectRandomMovie()
     }
     
     private func selectRandomMovie() {

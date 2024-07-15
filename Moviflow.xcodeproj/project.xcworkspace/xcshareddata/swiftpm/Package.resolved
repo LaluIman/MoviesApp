@@ -1,0 +1,15 @@
+{
+  "originHash" : "e4f598442873748a9fc9f0cbfcd424af070365b3f3dfb8c48e2ebafa84191b10",
+  "pins" : [
+    {
+      "identity" : "tabbar",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onl1ner/TabBar.git",
+      "state" : {
+        "revision" : "995e6bc32829d0a0f5300d6f49b654412068dbbe",
+        "version" : "1.3.0"
+      }
+    }
+  ],
+  "version" : 3
+}

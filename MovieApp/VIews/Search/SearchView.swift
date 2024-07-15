@@ -10,6 +10,8 @@ import SwiftUI
 struct SearchView: View {
     @StateObject private var networkManager = NetworkManager()
     @State private var searchText = ""
+    @Environment(\.presentationMode) var presentationMode
+    @State private var isFullScreenPresented = false
     
     var body: some View {
         NavigationView {
@@ -26,12 +28,16 @@ struct SearchView: View {
                 .clipShape(Capsule())
             .padding()
                 
-                List(networkManager.searchedMovies) { movie in
-                    NavigationLink(destination: DetailView(movie: movie)) {
-                        MovieRowView(movie: movie)
+                if searchText.isEmpty{
+                    SearchNotYetView()
+                }else{
+                    List(networkManager.searchedMovies) { movie in
+                        NavigationLink(destination: DetailView(movie: movie)) {
+                            MovieRowView(movie: movie)
+                        }
                     }
+                    .listStyle(.plain)
                 }
-                .listStyle(.plain)
             }
             .navigationBarTitle("Search")
         }

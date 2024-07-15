@@ -20,7 +20,7 @@ struct MovieCardView: View {
                             image
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: 125, height: 200)
+                                .frame(width: 135, height: 200)
                                 .clipShape(RoundedRectangle(cornerRadius: 15))
                                 .clipped()
                                 .shadow(color:.white,radius: 1)
@@ -31,22 +31,11 @@ struct MovieCardView: View {
                                 .frame(width: 50, height: 50)
                                 .foregroundColor(.gray)
                         } else {
-                                SkeletonView(width: 130, height: 200, cornerRadius: 30)
+                                SkeletonView(width: 135, height: 200, cornerRadius: 30)
                                 .clipped()
                         }
                     }
                 }
-                VStack{
-                    Text(movie.title)
-                        .font(.subheadline).bold()
-                        .foregroundStyle(.white)
-                }
-                .padding(.horizontal)
-                .padding(.vertical, 5)
-                .background(.black.opacity(0.3))
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .shadow(radius: 1)
-                .frame(width:150,height: 200, alignment: .bottom)
                 HStack{
                     Text("\(movie.voteAverage, specifier: "%.1f")")
                         .foregroundStyle(.white)
@@ -63,9 +52,20 @@ struct MovieCardView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .frame(width: 150, height: 200, alignment: .topLeading)
             }
-            .frame(width: 150)
+            
+            
+            VStack{
+                Text(movie.title)
+                    .font(.subheadline).bold()
+                    .foregroundStyle(.white)
+            }
+            .padding(.horizontal)
             .padding(.vertical, 5)
+            .shadow(radius: 1)
+            .lineLimit(1)
         }
+        .frame(width: 150)
+        .padding(.vertical, 5)
     }
 }
 
