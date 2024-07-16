@@ -28,7 +28,7 @@ struct MovieRowView: View {
                             .resizable()
                             .scaledToFit()
                             .foregroundColor(.gray)
-                            .frame(width: 150, height: 150)
+                            .frame(width: 100, height: 100)
                     } else {
                         SkeletonView(width: 120, height: 150, cornerRadius: 30)
                             .clipped()

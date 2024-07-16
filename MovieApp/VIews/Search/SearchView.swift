@@ -41,6 +41,7 @@ struct SearchView: View {
             }
             .navigationBarTitle("Search")
         }
+        .accentColor(.white)
         .environment(\.colorScheme, .dark)
     }
 }

@@ -11,11 +11,14 @@ struct DetailView: View {
     let movie: Movie
     @Environment(\.presentationMode) var presentationMode
     @State private var trailerURL: URL? = nil
-    @StateObject private var networkManager = NetworkManager() // Initialize the NetworkManager
+    @StateObject private var networkManager = NetworkManager()
+    @Environment(\.managedObjectContext) private var viewContext
+    @StateObject private var dataController = DataController()
+    @State private var isFavorite = false
 
     var body: some View {
         NavigationView {
-            ScrollView(showsIndicators: false){
+            ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading) {
                     if let posterPath = movie.posterPath,
                        let url = URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)") {
@@ -42,7 +45,7 @@ struct DetailView: View {
                             }
                         }
                     }
-                    // Red button for trailer
+
                     Button(action: {
                         if let url = trailerURL {
                             UIApplication.shared.open(url)
@@ -57,40 +60,53 @@ struct DetailView: View {
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(Color.red.opacity(0.7))
-                    .cornerRadius(10)
+                        .cornerRadius(10)
                     }
                     .padding(.top, 16)
                     .onAppear {
                         fetchTrailerURL()
                     }
 
-                    
                     HStack {
                         Text(movie.title)
                             .font(.title)
                             .bold()
-                        .padding(.top, 8)
+                            .padding(.top, 8)
                         
                         Spacer()
-                        
+
                         HStack {
                             Text("\(movie.voteAverage, specifier: "%.1f")")
                                 .font(.title2).bold()
                             Image(systemName: "star.fill")
                                 .foregroundColor(.yellow)
                         }
+
+                        Button(action: {
+                            if isFavorite {
+                                removeFromFavorites()
+                            } else {
+                                addToFavorites()
+                            }
+                            presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Image(systemName: isFavorite ? "heart.fill" : "heart")
+                                .font(.title)
+                                .foregroundColor(.red)
+                                .padding()
+                        }
+                        .disabled(isFavorite)
                     }
                     .padding(.bottom)
-                    
+
                     Text("Release Date: \(movie.releaseDate)")
                         .font(.headline)
                         .foregroundColor(.secondary)
-                    
+
                     Text(movie.overview)
                         .font(.body)
                         .padding(.top, 8)
 
-                   
                     Spacer()
                 }
                 .padding()
@@ -110,8 +126,11 @@ struct DetailView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            checkIfFavorite()
+        }
     }
-    
+
     private func fetchTrailerURL() {
         networkManager.fetchVideos(for: movie.id) { videos in
             trailerURL = videos.first(where: { $0.type == "Trailer" && $0.site == "YouTube" }).flatMap {
@@ -119,7 +138,35 @@ struct DetailView: View {
             }
         }
     }
+
+    private func addToFavorites() {
+        dataController.addFavoriteMovie(
+            id: movie.id,
+            title: movie.title,
+            rating: movie.voteAverage,
+            releaseDate: movie.releaseDate,
+            overview: movie.overview,
+            trailerURL: trailerURL?.absoluteString ?? "",
+            posterPath: movie.posterPath ?? "",
+            context: viewContext
+        )
+        isFavorite = true
+    }
+
+
+    private func removeFromFavorites() {
+        dataController.removeFavoriteMovie(id: movie.id, context: viewContext)
+        isFavorite = false
+    }
+
+    private func checkIfFavorite() {
+        let favoriteMovies = dataController.fetchFavoriteMovies()
+        if favoriteMovies.contains(where: { $0.id == Int32(movie.id) }) {
+            isFavorite = true
+        }
+    }
 }
+
 
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {

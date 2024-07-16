@@ -8,7 +8,7 @@
 import Foundation
 
 class NetworkManager: ObservableObject {
-    private let apiKey = "API_KEY_HERE!"
+    private let apiKey = "API"
     @Published var topMovies: [Movie] = []
     @Published var recentMovies: [Movie] = []
     @Published var allMovies: [Movie] = []

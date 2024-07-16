@@ -14,6 +14,7 @@ struct CustomTabView: View {
     let tabBarItems: [(image: String, title: String)] = [
         ("house.fill", "Home"),
         ("magnifyingglass", "Search"),
+        ("heart.fill", "Favorite"),
     ]
     
     var body: some View {
@@ -76,7 +77,7 @@ struct TabBarItemView: View {
                     .foregroundStyle(.red)
                     .matchedGeometryEffect(id: "SelectedTabId", in: animationNamespace)
                     .offset(y: 3)
-                    .padding(.horizontal, 50)
+                    .padding(.horizontal, 20)
             } else {
                 Capsule()
                     .frame(height: 8)

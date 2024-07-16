@@ -17,6 +17,9 @@ struct ContentView: View {
                 SearchView()
                     .preferredColorScheme(.dark)
                     .tag(2)
+                FavoriteView()
+                    .preferredColorScheme(.dark)
+                    .tag(3)
             }
 
             .overlay(alignment:.bottom){
